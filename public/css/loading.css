@@ -1,0 +1,39 @@
+@import "animate.css";
+
+html, body{
+    height:100%;
+    margin:0;
+    padding:0
+}
+#narrate {
+    background:#eee;
+    height: 100%;
+    width: 100%;
+    position:relative;
+    vertical-align:middle;
+    display:table;
+}
+
+h1 {
+    font-size: 3em;
+    font-weight: 700;
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    -webkit-animation-duration: 4s !important;
+    -webkit-animation-iteration-count: infinite;
+
+    color: #009a09;
+    background-image: -webkit-linear-gradient(92deg, #1e4977, #86c7ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: hue 1s infinite linear;
+
+}
+
+small{
+    display:block;
+    font-size:20px
+}
