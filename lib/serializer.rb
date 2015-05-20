@@ -56,54 +56,70 @@ module Serializer
     def IndexEntryDecorator_serializer
       uri = self.uri.to_s
       attributes_hash = self.attributes_hash
-      hash_result = { uri => {} }
-      self.attributes_names.each{|node| hash_result[uri][node] = [get_hash_node(attributes_hash[node])] }
+      hash_result = {
+        '@uri' => uri,
+        '@type' => self.class.to_s
+      }
+      self.attributes_names.each{|node| hash_result[node] = [get_hash_node(attributes_hash[node])] }
       hash_result
     end
   
     def ContextIndexInstance_serializer
-      { self.uri.to_s => {"shdm:index_title" => self.index_title, "shdm:index_name" => self.index_name, "shdm:index_nodes" => self.nodes.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}", :type => node.class.to_s} }} }
+      {
+        '@uri' => self.uri.to_s,
+        '@type' => self.class.to_s,
+        "shdm:index_title" => self.index_title,
+        "shdm:index_name" => self.index_name,
+        "shdm:index_nodes" => self.nodes.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}" , :type => node.class.to_s } }
+      }
     end
     
     def ContextInstance_serializer
-      { self.uri.to_s => {"shdm:context_name" => self.context_name, "shdm:context_title" => self.context_title, "shdm:context_resources" => self.resources.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}", :type => node.class.to_s} }} }
+      {
+        '@uri' => self.uri.to_s,
+        '@type' => self.class.to_s,
+        'shdm:context_name' => self.context_name,
+        'shdm:context_title' => self.context_title,
+        'shdm:context_resources' => self.resources.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}" , :type => node.class.to_s} }
+      }
     end
     
     def NodeDecorator_serializer
       uri = self.uri.to_s
-      
-      hash_result = { uri => {
-        "context" => [self.context.uri],
-        "label" => self.rdfs::label || [self.compact_uri],
-        "resource_properties" => [{}],
-        "navigational_properties" => [{
-          "node_position" => self.node_position,
-          "next_node" => self.next_node_anchor.respond_to?(:target_url) ? self.next_node_anchor.target_url(true) : nil,
-          "previous_node" => self.previous_node_anchor.respond_to?(:target_url) ? self.previous_node_anchor.target_url(true) : nil,
-          "next_node_target_url" => self.next_node_anchor.respond_to?(:target_url) ? self.next_node_anchor.target_url : nil,
-          "previous_node_target_url" => self.previous_node_anchor.respond_to?(:target_url) ? self.previous_node_anchor.target_url : nil
-        }]
-        }
+
+      hash_result = {
+          '@uri' => uri,
+          '@type' => self.class.to_s,
+          '@label' => self.rdfs::label || [self.compact_uri],
+          '@navigational' => {
+            '@position' => self.node_position,
+            '@next' => self.next_node_anchor.respond_to?(:target_url) ? self.next_node_anchor.target_url(true) : nil,
+            '@previous' => self.previous_node_anchor.respond_to?(:target_url) ? self.previous_node_anchor.target_url(true) : nil,
+            '@next_uri' => self.next_node_anchor.respond_to?(:target_url) ? self.next_node_anchor.target_url : nil,
+            '@previous_uri' => self.previous_node_anchor.respond_to?(:target_url) ? self.previous_node_anchor.target_url : nil
+          }
       }
+
       # navigational_properties 
       attributes_hash = self.attributes_hash
-      self.attributes_names.each{|node| hash_result[uri]["navigational_properties"].first[node] = [get_hash_node(attributes_hash[node])] }
+      self.attributes_names.each{|node| hash_result["@navigational"][node] = [get_hash_node(attributes_hash[node])] }
       
       # resource_properties
-      self.direct_properties.each{|property| hash_result[uri]["resource_properties"].first[property.label.to_a.empty? ? property.compact_uri : property.label.first] = get_hash_node(property) }
+      self.direct_properties.each{|property| hash_result[property.label.to_a.empty? ? property.compact_uri : property.label.first] = get_hash_node(property) }
       hash_result
     end
     
     
     def Resource_serializer
       uri = self.uri.to_s
-      hash_result = { uri => {
-        "label" => self.rdfs::label || [self.compact_uri],
-        "resource_properties" => [{}]
-        }
+      hash_result = {
+          '@uri' => uri,
+          '@type' => self.class.to_s,
+          '@label' => self.rdfs::label || [self.compact_uri],
       }
+
       # resource_properties
-      self.direct_properties.each{|property| hash_result[uri]["resource_properties"].first[property.label.to_a.empty? ? property.compact_uri : property.label.first] = get_hash_node(property) }
+      self.direct_properties.each{|property| hash_result[property.label.to_a.empty? ? property.compact_uri : property.label.first] = get_hash_node(property) }
       hash_result
     end
 end

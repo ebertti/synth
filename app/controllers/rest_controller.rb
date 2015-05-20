@@ -1,11 +1,14 @@
 class RestController < ApplicationController
-  
+
   def index
     #cleaning extra parameters
     params.delete(:controller)
     params.delete(:action)
 
-    index_id = params.delete(:id)
+    index_id = params.delete(:s)
+    if index_id.nil?
+      index_id = 'http://index'
+    end
       unless index_id.nil?
       index = SHDM::Index.find(index_id) unless index_id.nil?
       index = index.nil? ? SHDM::Index.find_all.first : index
@@ -25,14 +28,14 @@ class RestController < ApplicationController
       #format.xml  { render :xml => result }
     end
   end
- 
- 
+
+
   def context
     params.delete(:controller)
     params.delete(:action)
 
-    context_id = params.delete(:id)
-    
+    context_id = params.delete(:s)
+
     unless context_id.nil?
       node_id    = params.delete(:node)
       context    =  SHDM::Context.find(context_id)
@@ -52,10 +55,10 @@ class RestController < ApplicationController
       #format.xml  { render :xml => result }
     end
   end
-  
+
   def resource
-    resource_id = params.delete(:id)
-    resource    = resource_id.nil? ? {} : SHDM::Resource.new(resource_id) 
+    resource_id = params.delete(:s)
+    resource    = resource_id.nil? ? {} : SHDM::Resource.new(resource_id)
     respond_to do |format|
       format.json  { render :json => resource.serialize }
       format.text { render :text => resource.inspect }
