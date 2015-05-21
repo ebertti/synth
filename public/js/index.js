@@ -29,6 +29,7 @@ var interface_abstracts = [
                 { name: 'apps', datasource:exemplos, children: 'app' },
                 'examples_sources',
                 { name: 'links', datasource:exemplos, children: 'link' },
+                'synth', 'synth_link',
                 'builder', 'builder_link',
                 'docs', 'docs_link',
                 'repository', 'repository_codeplex', 'repository_github',
@@ -68,6 +69,9 @@ var concrete_interface = [{
 
         { name: 'builder', widget: 'BootstrapSimple', tag:'h3', value:'"Abstract Interface Builder available at"' },
         { name: 'builder_link', widget: 'BootstrapSimple', tag:'a', btn:'info,lg', xs:'block', sm:'inline', md:'inline', lg:'inline', value:'"Builder"', href:'"http://ebertti.github.io/mira-ui/"'},
+
+        { name: 'synth', widget: 'BootstrapSimple', tag:'h3', value:'"Running with Synth at"' },
+        { name: 'synth_link', widget: 'BootstrapSimple', tag:'a', btn:'info,lg', xs:'block', sm:'inline', md:'inline', lg:'inline', value:'"Synth"', href:'"/mira.html?app=synth"'},
 
 
         { name: 'repository', widget: 'BootstrapSimple', tag:'h3', value:'"Source code available at"' },

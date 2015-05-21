@@ -68,9 +68,9 @@ module Serializer
       {
         '@uri' => self.uri.to_s,
         '@type' => self.class.to_s,
-        "shdm:index_title" => self.index_title,
-        "shdm:index_name" => self.index_name,
-        "shdm:index_nodes" => self.nodes.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}" , :type => node.class.to_s } }
+        "@title" => self.index_title,
+        "@name" => self.index_name,
+        "@nodes" => self.nodes.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}" , :label => node.rdfs::label.first, :type => node.class.to_s } }
       }
     end
     
@@ -78,9 +78,9 @@ module Serializer
       {
         '@uri' => self.uri.to_s,
         '@type' => self.class.to_s,
-        'shdm:context_name' => self.context_name,
-        'shdm:context_title' => self.context_title,
-        'shdm:context_resources' => self.resources.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}" , :type => node.class.to_s} }
+        '@name' => self.context_name,
+        '@title' => self.context_title,
+        '@resources' => self.resources.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}" , :type => node.class.to_s} }
       }
     end
     
