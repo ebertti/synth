@@ -33,3 +33,8 @@ RUNNING (Ruby 1.9)
 $ jruby --1.9 -S script/server
 
 Open on your internet browser: http://localhost:3000
+
+RUNNING with MIRA
+-----------------
+
+Open on your internet browser: http://localhost:3000/mira.html
