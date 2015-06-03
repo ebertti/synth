@@ -39,6 +39,8 @@ RUNNING with MIRA
 
 Open on your internet browser: [http://localhost:3000/mira.html](http://localhost:3000/mira.html)
 
+Mira Docs: [http://mira.tecweb.inf.puc-rio.br/docs](http://mira.tecweb.inf.puc-rio.br/docs)
+
 MIRA files
 ----------
 
@@ -48,12 +50,12 @@ MIRA files
     $ cd /path/to/synth/public/js
     
     
-* Path to edit your interface
+* Path to edit your interface:
+
+
+    $ edit /path/to/synth/public/js/app.js
+
+ 
+* RUN your application:
     
-    
-    /path/to/synth/public/js/app.js
-    
-    
-* RUN your application
-    
-    Open on your internet browser: [http://localhost:3000/mira.html?app=app](http://localhost:3000/mira.html?app=app)
+Open on your internet browser: [http://localhost:3000/mira.html?app=app](http://localhost:3000/mira.html?app=app)
