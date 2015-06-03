@@ -2,7 +2,7 @@
 
 var condition = [{
     name: 'isResource',
-    validate: '$data["@type"] == 3'
+    validate: '$data["@type"] == "SHDM::Resource"'
 }];
 
 var selection = [
@@ -30,6 +30,23 @@ var interface_abstracts = [
                 }
             ]}
         ]
+    },{
+        name:'resource',
+        widgets : [
+            {'container':[
+                {'head': 'title'},
+                {'content': {name: 'items', children:[
+                    {'item':
+                    {'tipo': { 'link': [
+                        {name: 'label', bind: '$data["@label"].join(" ")'},
+                        {name: 'type', bind: '$data["@type"]'},
+                        {name: 'uri', bind: '$data["@uri"]'}
+                    ]}}
+                    }
+                ]}
+                }
+            ]}
+        ]
     }
 ];
 
@@ -42,7 +59,7 @@ var concrete_interface = [
     {
         name: 'landing',
         head: GeralHead.concat([
-            {name: 'title', widget:'Title', value: '"Imovel"'}
+            {name: 'title', widget:'Title', value: '"Workin with Synth"'}
         ]),
         maps: [
 
@@ -58,7 +75,28 @@ var concrete_interface = [
             { name: 'type', tag:'p', value:'$bind' },
             { name: 'value', tag:'p', value:'$bind' },
             { name: 'link', tag:'a', href:'navigate("/rest/resource/?s=" + $data.value)' }
-        ]}
+        ]
+    },{
+        name: 'resource',
+        head: GeralHead.concat([
+            {name: 'title', widget:'Title', value: '"Resource | Workin with Synth"'}
+        ]),
+        maps: [
+
+            { name: 'container', tag:'div', class:'container' },
+            { name: 'head', tag:'div', class:'jumbotron' },
+            { name: 'title', tag:'h1', text:'center', value:'"Resource | Working With Synth"' },
+
+            { name: 'content', class:'row', md:'10,offset-1' },
+            { name: 'items' },
+            { name: 'item', md:'6'},
+            { name: 'tipo', class:'panel-body' },
+            { name: 'link' },
+            { name: 'label', tag:'p', value:'$bind' },
+            { name: 'type', tag:'p', value:'$bind' },
+            { name: 'uri', tag:'p', value:'$bind' }
+        ]
+    }
 ];
 
 var ajaxSetup = {
