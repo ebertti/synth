@@ -21,20 +21,39 @@ INSTALLING
 Install JRuby (http://jruby.org) 1.6.8
 
 Install Bundler
-$ jgem install bundler
+    $ jgem install bundler
 
 Install dependencies
-$ cd /path/to/synth
-$ bundle install
+    $ cd /path/to/synth
+    $ bundle install
 
 RUNNING (Ruby 1.9)
 -------
 
-$ jruby --1.9 -S script/server
+    $ jruby --1.9 -S script/server
 
-Open on your internet browser: http://localhost:3000
+Open on your internet browser: [http://localhost:3000](http://localhost:3000)
 
 RUNNING with MIRA
 -----------------
 
-Open on your internet browser: http://localhost:3000/mira.html
+Open on your internet browser: [http://localhost:3000/mira.html](http://localhost:3000/mira.html)
+
+MIRA files
+----------
+
+* Locations:
+
+
+    $ cd /path/to/synth/public/js
+    
+    
+* Path to edit your interface
+    
+    
+    /path/to/synth/public/js/app.js
+    
+    
+* RUN your application
+    
+    Open on your internet browser: [http://localhost:3000/mira.html?app=app](http://localhost:3000/mira.html?app=app)

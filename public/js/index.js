@@ -17,7 +17,7 @@ var thanks = [
     {name: "Microsoft Brasil Open Source", href:"http://www.microsoft.com/brasil/opensource/projects.aspx"}
 ];
 
-var rules = [];
+var conditions = [];
 
 var selection = [];
 
@@ -29,7 +29,7 @@ var interface_abstracts = [
                 { name: 'apps', datasource:exemplos, children: 'app' },
                 'examples_sources',
                 { name: 'links', datasource:exemplos, children: 'link' },
-                'synth', 'synth_link',
+                'synth', 'synth_link', 'synth_your_link',
                 'builder', 'builder_link',
                 'docs', 'docs_link',
                 'repository', 'repository_codeplex', 'repository_github',
@@ -72,6 +72,7 @@ var concrete_interface = [{
 
         { name: 'synth', widget: 'BootstrapSimple', tag:'h3', value:'"Running with Synth at"' },
         { name: 'synth_link', widget: 'BootstrapSimple', tag:'a', btn:'info,lg', xs:'block', sm:'inline', md:'inline', lg:'inline', value:'"Synth"', href:'"/mira.html?app=synth"'},
+        { name: 'synth_your_link', widget: 'BootstrapSimple', tag:'a', btn:'info,lg', xs:'block', sm:'inline', md:'inline', lg:'inline', value:'"Custom App"', href:'"/mira.html?app=app"'},
 
 
         { name: 'repository', widget: 'BootstrapSimple', tag:'h3', value:'"Source code available at"' },
@@ -95,7 +96,7 @@ if(typeof define === 'function') {
     ], function ($, $bootstrap, Mira) {
 
         return function Index() {
-            var app = new Mira.Application(interface_abstracts, concrete_interface, rules, selection);
+            var app = new Mira.Application(interface_abstracts, concrete_interface, conditions, selection);
         };
 
     });
@@ -104,7 +105,7 @@ if(typeof define === 'function') {
     exports.abstracts = interface_abstracts;
     exports.mapping = concrete_interface;
     exports.selection = selection;
-    exports.rules = rules;
+    exports.rules = conditions;
 }
 
 
