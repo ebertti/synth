@@ -1,21 +1,28 @@
 module Serializer
   
   def serialize
-    case self.class.to_s
-      when 'IndexEntryDecorator'
-        self.IndexEntryDecorator_serializer
-      when 'SHDM::ContextIndex::ContextIndexInstance'
-        self.ContextIndexInstance_serializer
-      when 'SHDM::Context::ContextInstance'
-        self.ContextInstance_serializer
-      when 'NodeDecorator'
-        self.NodeDecorator_serializer
-      when 'SHDM::Resource'
-        self.Resource_serializer
-      else
-        {}
+    if self.class.to_s == 'NilClass'
+      return {:none=>TRUE}
     end
-      
+
+    if self.class.to_s != 'Array'
+      case self.classes.last.to_s
+        when 'IndexEntryDecorator'
+          self.IndexEntryDecorator_serializer
+        when 'SHDM::ContextIndex'
+          self.ContextIndexInstance_serializer
+        when 'SHDM::Context::ContextInstance'
+          self.ContextInstance_serializer
+        when 'NodeDecorator'
+          self.NodeDecorator_serializer
+        else
+          self.Resource_serializer
+      end
+    else
+      self.map{|item| item.serialize}
+    end
+
+
   end
   
   def parameters_to_url()
@@ -39,17 +46,25 @@ module Serializer
     
     def get_hash_node(node)
       if node.is_a?(IndexNodeAttribute)
-       { :value => "#{CGI::escape(node.index.to_s)}#{node.parameters_to_url}", :type => node.class.to_s, :url => node.respond_to?(:target_url) ? node.target_url : nil, :parameters => node.parameters_to_url }
+       { :value => "#{CGI::escape(node.index.to_s)}#{node.parameters_to_url}", :type => get_class_name(node), :url => node.respond_to?(:target_url) ? node.target_url : nil, :parameters => node.parameters_to_url }
       elsif  node.is_a?(ContextAnchorNodeAttribute)
-        { :value => node.label.to_s, :type => node.class.to_s, :target_url => node.target_url, :url => node.target_url(true) }
+        { :value => node.label.to_s, :type => get_class_name(node), :target_url => node.target_url, :url => node.target_url(true) }
       elsif node.is_a?(RDF::Property)
         #node.map{|property| { :value => node.to_s, :type => node.class.to_s } }
         node.to_a.map{|property| { 
           :value => property.is_a?(RDFS::Resource) ? (property.rdfs::label.empty? ? property.compact_uri : property.rdfs::label.first) : property.to_s, 
-          :type => property.class.to_s, :uri => property.is_a?(RDFS::Resource) ? property.compact_uri : nil } }
+          :type => get_class_name(property), :uri => property.is_a?(RDFS::Resource) ? property.compact_uri : nil } }
         
       else
-        { :value => node.label.to_s, :type => node.class.to_s, :url => node.respond_to?(:url) ? node.url : nil }
+        { :value => node.label.to_s, :type => get_class_name(node), :url => node.respond_to?(:url) ? node.url : nil }
+      end
+    end
+
+    def get_class_name(obj)
+      if defined? obj.classes
+        self.classes.map{|i| i.to_s }
+      else
+        [self.class.to_s]
       end
     end
     
@@ -58,7 +73,7 @@ module Serializer
       attributes_hash = self.attributes_hash
       hash_result = {
         '@uri' => uri,
-        '@type' => self.class.to_s
+        '@type' => get_class_name(self)
       }
       self.attributes_names.each{|node| hash_result[node] = [get_hash_node(attributes_hash[node])] }
       hash_result
@@ -67,20 +82,20 @@ module Serializer
     def ContextIndexInstance_serializer
       {
         '@uri' => self.uri.to_s,
-        '@type' => self.class.to_s,
+        '@type' => get_class_name(self),
         "@title" => self.index_title,
         "@name" => self.index_name,
-        "@nodes" => self.nodes.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}" , :label => node.rdfs::label.first, :type => node.class.to_s } }
+        "@nodes" => self.nodes.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}" , :label => node.rdfs::label.first, :type => get_class_name(node) } }
       }
     end
     
     def ContextInstance_serializer
       {
         '@uri' => self.uri.to_s,
-        '@type' => self.class.to_s,
+        '@type' => get_class_name(self),
         '@name' => self.context_name,
         '@title' => self.context_title,
-        '@resources' => self.resources.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}" , :type => node.class.to_s} }
+        '@resources' => self.resources.map{ |node| {:value => "#{node.to_s}#{node.parameters_to_url}" , :type => get_class_name(node)} }
       }
     end
     
@@ -89,7 +104,7 @@ module Serializer
 
       hash_result = {
           '@uri' => uri,
-          '@type' => self.class.to_s,
+          '@type' => self.classes.map{|i| i.to_s},
           '@label' => self.rdfs::label || [self.compact_uri],
           '@navigational' => {
             '@position' => self.node_position,
@@ -114,7 +129,7 @@ module Serializer
       uri = self.uri.to_s
       hash_result = {
           '@uri' => uri,
-          '@type' => self.class.to_s,
+          '@type' => get_class_name(self),
           '@label' => self.rdfs::label || [self.compact_uri],
       }
 

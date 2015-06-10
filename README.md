@@ -59,3 +59,6 @@ MIRA files
 * RUN your application:
     
 Open on your internet browser: [http://localhost:3000/mira.html?app=app](http://localhost:3000/mira.html?app=app)
+
+[REST examples](doc/Rest.md)
+

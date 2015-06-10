@@ -65,4 +65,24 @@ class RestController < ApplicationController
       #format.xml  { render :xml => result }
     end
   end
+
+  def node
+    resource_id = params.delete(:r)
+    context_id = params.delete(:c)
+    resource    = resource_id.nil? ? {} : SHDM::NodeDecorator.new(resource_id, context_id)
+    respond_to do |format|
+      format.json  { render :json => resource.serialize }
+      format.text { render :text => resource.inspect }
+      #format.xml  { render :xml => result }
+    end
+  end
+
+  def landmark
+    results = SHDM::Landmark.all
+    respond_to do |format|
+      format.json  { render :json => results.serialize }
+      format.text { render :text => results.inspect }
+    end
+  end
+
 end
