@@ -2,7 +2,7 @@
 
 var condition = [{
     name: 'isResource',
-    validate: '$data["@type"] == "SHDM::Resource"'
+    validate: '_.contains($data["@type"], "RDFS::Resource")'
 }];
 
 var selection = [
